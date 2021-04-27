@@ -24,7 +24,7 @@ public class ProductItem {
     private Product product;
 
     @OneToOne
-    @Column(name = "storage_id")
+    @JoinColumn(name = "storage_id")
     private Storage storage;
 
     @Column(name = "created_at")

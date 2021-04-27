@@ -1,3 +1,5 @@
+CREATE SCHEMA market2;
+
 CREATE TABLE market2.users
 (
     id bigserial NOT NULL,

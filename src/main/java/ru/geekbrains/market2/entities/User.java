@@ -24,7 +24,4 @@ public class User {
 
     @Column(name = "email")
     private String email;
-
-    @OneToMany( mappedBy = "customer_id", targetEntity = Order.class)
-    private List<Order> orders;
 }

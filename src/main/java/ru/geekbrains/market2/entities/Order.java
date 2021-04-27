@@ -20,7 +20,7 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(mappedBy = "orderitem_id")
+    @OneToMany(mappedBy = "id")
     private List<OrderItem> orderItems;
 
     @Column(name = "total_price")
