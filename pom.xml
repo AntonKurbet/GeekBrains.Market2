@@ -8,14 +8,23 @@
 		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>ru.geekbrains</groupId>
-	<artifactId>Market2</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>GeekBrains.Market2</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>market2</artifactId>
+	<version>0.0.1</version>
+	<name>market2</name>
+	<description>Market Study project</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+
+	<modules>
+		<module>ms-product</module>
+		<module>ms-core</module>
+		<module>ms-auth</module>
+		<module>ms-order</module>
+		<module>ms-storage</module>
+	</modules>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -55,6 +64,8 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<packaging>pom</packaging>
 
 	<build>
 		<plugins>
