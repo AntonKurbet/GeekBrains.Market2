@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ru.geekbrains.market2.mscore.model.dtos.UserDto;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,9 +27,9 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User customer;
+//    @ManyToOne
+//    @JoinColumn(name = "customer_id")
+    private Long customer_id;
 
     @Column(name = "created_at")
     @CreationTimestamp

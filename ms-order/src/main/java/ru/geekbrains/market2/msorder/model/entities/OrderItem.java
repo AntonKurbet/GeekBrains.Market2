@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ru.geekbrains.market2.mscore.model.dtos.ProductDto;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,9 +24,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id")
+    private ProductDto product;
 
     @Column(name = "quantity")
     private int quantity;

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
+import ru.geekbrains.market2.mscore.model.dtos.ProductDto;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -18,9 +18,9 @@ public class ProductItem {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @OneToOne
+//    @JoinColumn(name = "product_id")
+    private ProductDto product;
 
     @OneToOne
     @JoinColumn(name = "storage_id")
