@@ -2,6 +2,7 @@ package ru.geekbrains.market2.msproduct.model.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,7 +23,13 @@ public class Category {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany
+    @JoinTable(
+            name = "products_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    @ToString.Exclude
     private List<Product> products;
 
     @Column(name = "created_at")
@@ -35,8 +42,4 @@ public class Category {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    public Category(String title) {
-        this.title = title;
-    }
 }

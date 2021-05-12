@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.geekbrains.market2.msauth.model.dtos.AuthResponseDto;
-import ru.geekbrains.market2.msauth.model.dtos.SignUpRequestDto;
-import ru.geekbrains.market2.mscore.configs.jwt.JwtProvider;
-import ru.geekbrains.market2.mscore.model.entities.User;
-import ru.geekbrains.market2.mscore.services.UserService;
+import ru.geekbrains.market2.mscore.interfaces.ITokenService;
+import ru.geekbrains.market2.mscore.model.dtos.AuthRequestDto;
+import ru.geekbrains.market2.mscore.model.dtos.AuthResponseDto;
+import ru.geekbrains.market2.mscore.model.dtos.SignUpRequestDto;
+import ru.geekbrains.market2.msauth.model.entities.User;
+import ru.geekbrains.market2.msauth.services.UserService;
+import ru.geekbrains.market2.mscore.model.entities.UserInfo;
 
 
 @RestController
@@ -18,21 +20,27 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private JwtProvider jwtProvider;
+    private ITokenService tokenService;
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public String registerUser(@RequestBody SignUpRequestDto signUpRequest) {
         User user = new User();
         user.setPassword(signUpRequest.getPassword());
         user.setLogin(signUpRequest.getLogin());
+        user.setEmail(signUpRequest.getEmail());
         userService.saveUser(user);
         return "OK";
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/signin")
     public AuthResponseDto auth(@RequestBody AuthRequestDto request) {
         User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getLogin());
+        UserInfo userInfo = UserInfo.builder()
+                .userId(user.getId())
+                .userEmail(user.getLogin())
+                .role(user.getRole().getName())
+                .build();
+        String token = tokenService.generateToken(userInfo);
         return new AuthResponseDto(token);
     }
 }

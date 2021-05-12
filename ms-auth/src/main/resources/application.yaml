@@ -1,11 +1,11 @@
 server:
-  port: 8081
+  port: 8080
   servlet:
-    context-path: /app
+    context-path: /auth
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/db_products
+    url: jdbc:postgresql://localhost:5432/db_auth
     username: dba
     password: 1234
   jpa:
@@ -13,5 +13,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
-
-

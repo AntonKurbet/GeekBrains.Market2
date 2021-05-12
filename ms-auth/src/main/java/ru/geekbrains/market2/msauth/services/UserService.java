@@ -1,6 +1,6 @@
-package ru.geekbrains.market2.mscore.services;
+package ru.geekbrains.market2.msauth.services;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,12 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.geekbrains.market2.mscore.model.dtos.UserDto;
-import ru.geekbrains.market2.mscore.model.entities.Role;
-import ru.geekbrains.market2.mscore.model.entities.User;
-import ru.geekbrains.market2.mscore.repositories.RoleRepository;
-import ru.geekbrains.market2.mscore.repositories.UserRepository;
-
+import ru.geekbrains.market2.msauth.model.entities.Role;
+import ru.geekbrains.market2.msauth.model.entities.User;
+import ru.geekbrains.market2.msauth.repositories.RoleRepository;
+import ru.geekbrains.market2.msauth.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,14 +20,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserService implements UserDetailsService{
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //private final UserMapper userMapper;
 
@@ -37,17 +38,18 @@ public class UserService implements UserDetailsService{
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
-    public Optional<UserDto> findDtoByUsername(String username) {
-        return findByLogin(username).map(UserDto::new);
-    }
+//    public Optional<UserDto> findDtoByUsername(String username) {
+//        return findByLogin(username).map(UserDto::new);
+//    }
 
     public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
-    public Optional<UserDto> findDtoById(long id) {
-        return findById(id).map(UserDto::new);
-    }
+//    public Optional<UserDto> findDtoById(long id) {
+//        return findById(id).map(UserDto::new);
+//    }
+
     public Optional<User> findById(long id) {
         return userRepository.findById(id);
     }
@@ -56,6 +58,7 @@ public class UserService implements UserDetailsService{
         Role role = roleRepository.findByName("ROLE_USER");
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEmail(user.getEmail());
         return userRepository.save(user);
     }
 

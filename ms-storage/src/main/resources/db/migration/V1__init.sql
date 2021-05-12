@@ -1,3 +1,4 @@
+/*
 CREATE SCHEMA storage_schema;
 
 CREATE TABLE storage_schema.product_items
@@ -28,4 +29,4 @@ ALTER TABLE market2.product_items
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
-
+*/

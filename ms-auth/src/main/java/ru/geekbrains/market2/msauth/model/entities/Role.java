@@ -1,4 +1,4 @@
-package ru.geekbrains.market2.mscore.model.entities;
+package ru.geekbrains.market2.msauth.model.entities;
 
 import lombok.Data;
 
