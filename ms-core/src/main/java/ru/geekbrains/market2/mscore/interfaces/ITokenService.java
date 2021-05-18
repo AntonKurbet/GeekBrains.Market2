@@ -8,4 +8,6 @@ public interface ITokenService {
     String generateToken(UserInfo user);
 
     UserInfo parseToken(String token);
+
+    long getTTL(String token);
 }

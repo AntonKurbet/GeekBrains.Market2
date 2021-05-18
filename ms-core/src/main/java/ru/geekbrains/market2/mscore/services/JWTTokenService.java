@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.geekbrains.market2.mscore.interfaces.ITokenService;
 import ru.geekbrains.market2.mscore.model.entities.UserInfo;
 
+import java.sql.Time;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class JWTTokenService implements ITokenService {
@@ -52,5 +54,17 @@ public class JWTTokenService implements ITokenService {
                 .userEmail(email)
                 .role(role)
                 .build();
+    }
+
+    @Override
+    public long getTTL(String token) throws ExpiredJwtException {
+//        Jws<Claims> jwsClaims = Jwts.parser()
+//                .setSigningKey(JWT_SECRET)
+//                .parseClaimsJws(token);
+//        long from = jwsClaims.getBody().getExpiration().getTime();
+//        long to = Date.from(Instant.now()).getTime();
+//
+//        return  TimeUnit.SECONDS.convert(from - to, TimeUnit.MILLISECONDS);
+        return 30;
     }
 }

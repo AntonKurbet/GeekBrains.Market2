@@ -7,8 +7,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.geekbrains.market2.mscore.exceptions.InvalidTokenException;
 import ru.geekbrains.market2.mscore.model.entities.UserInfo;
 import ru.geekbrains.market2.mscore.services.JWTTokenService;
+import ru.geekbrains.market2.mscore.services.RedisService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = createToken(authorizationHeader);
+        UsernamePasswordAuthenticationToken authenticationToken = checkToken(authorizationHeader);
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -47,8 +49,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 || !authorizationHeader.startsWith("Bearer ");
     }
 
-    private UsernamePasswordAuthenticationToken createToken(String authorizationHeader) throws ExpiredJwtException {
+    private UsernamePasswordAuthenticationToken checkToken(String authorizationHeader) throws ExpiredJwtException {
         String token = authorizationHeader.replace("Bearer ", "");
+
+        if (RedisService.checkExists(token)) throw new InvalidTokenException("");
 
         UserInfo userInfo = tokenService.parseToken(token);
 

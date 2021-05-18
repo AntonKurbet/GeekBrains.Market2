@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ru.geekbrains.market2.mscore.model.dtos.UserDto;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
