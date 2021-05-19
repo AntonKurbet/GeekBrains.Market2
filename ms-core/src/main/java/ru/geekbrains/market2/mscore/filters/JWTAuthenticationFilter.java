@@ -22,8 +22,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTTokenService tokenService;
 
-    public JWTAuthenticationFilter(JWTTokenService tokenService) {
+    private final RedisService redisService;
+
+    public JWTAuthenticationFilter(JWTTokenService tokenService, RedisService redisService) {
         this.tokenService = tokenService;
+        this.redisService = redisService;
     }
 
     @SneakyThrows
@@ -52,7 +55,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken checkToken(String authorizationHeader) throws ExpiredJwtException {
         String token = authorizationHeader.replace("Bearer ", "");
 
-        if (RedisService.checkExists(token)) throw new InvalidTokenException("");
+        if (redisService.checkExists(token)) throw new InvalidTokenException("");
 
         UserInfo userInfo = tokenService.parseToken(token);
 

@@ -22,6 +22,9 @@ public class AuthController {
     @Autowired
     private ITokenService tokenService;
 
+    @Autowired
+    private RedisService redisService;
+
     @PostMapping("/signup")
     public String registerUser(@RequestBody SignUpRequestDto signUpRequest) {
         User user = new User();
@@ -48,7 +51,7 @@ public class AuthController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String logout(@RequestHeader(name="Authorization") String token) {
         long ttl = tokenService.getTTL(token);
-        RedisService.putInvalidToken(
+        redisService.putInvalidToken(
                 token.replace("Bearer ", ""),
                 ttl);
         return "Logged out";

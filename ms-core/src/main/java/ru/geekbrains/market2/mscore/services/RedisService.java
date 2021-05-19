@@ -1,20 +1,24 @@
 package ru.geekbrains.market2.mscore.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
+import ru.geekbrains.market2.mscore.model.entities.TokenInfo;
+import ru.geekbrains.market2.mscore.repository.RedisRepository;
+
+import java.util.Optional;
 
 @Service
 public class RedisService {
 
-    public static boolean checkExists(String token) {
-        Jedis jedis = new Jedis();
-        String result = jedis.get(token);
-        return result != null;
+    @Autowired
+    private RedisRepository redisRepository;
+
+    public boolean checkExists(String token) {
+        Optional<TokenInfo> result = redisRepository.findById(token);
+        return result.isPresent();
     }
 
-    public static void putInvalidToken(String token, long seconds) {
-        Jedis jedis = new Jedis();
-        jedis.set(token, "invalid");
-        jedis.expire(token, (int) seconds);
+    public void putInvalidToken(String token, long seconds) {
+        redisRepository.save(new TokenInfo(token, (int) seconds));
     }
 }
