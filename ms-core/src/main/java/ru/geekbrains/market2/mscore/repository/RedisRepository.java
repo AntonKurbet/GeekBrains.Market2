@@ -1,10 +1,22 @@
 package ru.geekbrains.market2.mscore.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-import ru.geekbrains.market2.mscore.model.entities.TokenInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-@Repository
-public interface RedisRepository extends CrudRepository<TokenInfo, String> {}
+@Component
+public class RedisRepository {
+
+    @Autowired
+    private RedisTemplate<String, Integer> tokenRedisTemplate;
+
+    public void putToken(String token, long duration) {
+        tokenRedisTemplate.opsForValue().set("token:" + token, 1, duration, TimeUnit.SECONDS);
+    }
+
+    public Integer getToken(String token) {
+        return tokenRedisTemplate.opsForValue().get("token:" + token);
+    }
+}

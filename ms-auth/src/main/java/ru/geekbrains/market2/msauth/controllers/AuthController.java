@@ -10,7 +10,11 @@ import ru.geekbrains.market2.mscore.model.dtos.SignUpRequestDto;
 import ru.geekbrains.market2.msauth.model.entities.User;
 import ru.geekbrains.market2.msauth.services.UserService;
 import ru.geekbrains.market2.mscore.model.entities.UserInfo;
-import ru.geekbrains.market2.mscore.services.RedisService;
+import ru.geekbrains.market2.mscore.repository.RedisRepository;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
 
 @RestController
@@ -23,7 +27,7 @@ public class AuthController {
     private ITokenService tokenService;
 
     @Autowired
-    private RedisService redisService;
+    private RedisRepository redisRepository;
 
     @PostMapping("/signup")
     public String registerUser(@RequestBody SignUpRequestDto signUpRequest) {
@@ -47,11 +51,12 @@ public class AuthController {
         return new AuthResponseDto(token);
     }
 
-    @PostMapping("/signout")
+    @GetMapping("/signout")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String logout(@RequestHeader(name="Authorization") String token) {
-        long ttl = tokenService.getTTL(token);
-        redisService.putInvalidToken(
+        Date expirationDate = tokenService.getExpirationDate(token);
+        int ttl = (int) Duration.between(Instant.now(), expirationDate.toInstant()).toSeconds();
+        redisRepository.putToken(
                 token.replace("Bearer ", ""),
                 ttl);
         return "Logged out";

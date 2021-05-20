@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.geekbrains.market2.mscore.exceptions.InvalidTokenException;
 import ru.geekbrains.market2.mscore.model.entities.UserInfo;
+import ru.geekbrains.market2.mscore.repository.RedisRepository;
 import ru.geekbrains.market2.mscore.services.JWTTokenService;
-import ru.geekbrains.market2.mscore.services.RedisService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +22,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTTokenService tokenService;
 
-    private final RedisService redisService;
+    private final RedisRepository redisRepository;
 
-    public JWTAuthenticationFilter(JWTTokenService tokenService, RedisService redisService) {
+    public JWTAuthenticationFilter(JWTTokenService tokenService, RedisRepository redisRepository) {
         this.tokenService = tokenService;
-        this.redisService = redisService;
+        this.redisRepository = redisRepository;
     }
 
     @SneakyThrows
@@ -55,7 +55,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken checkToken(String authorizationHeader) throws ExpiredJwtException {
         String token = authorizationHeader.replace("Bearer ", "");
 
-        if (redisService.checkExists(token)) throw new InvalidTokenException("");
+        if (redisRepository.getToken(token)!=null) throw new InvalidTokenException("");
 
         UserInfo userInfo = tokenService.parseToken(token);
 

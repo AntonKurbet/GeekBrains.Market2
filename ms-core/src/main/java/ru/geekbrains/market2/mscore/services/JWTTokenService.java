@@ -35,6 +35,16 @@ public class JWTTokenService implements ITokenService {
     }
 
     @Override
+    public Date getExpirationDate(String header){
+        String token = header.replace("Bearer ", "");
+        Jws<Claims> jwsClaims = Jwts.parser()
+                .setSigningKey(JWT_SECRET)
+                .parseClaimsJws(token);
+
+        return jwsClaims.getBody().getExpiration();
+    }
+
+    @Override
     public UserInfo parseToken(String token) throws ExpiredJwtException {
         Jws<Claims> jwsClaims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
@@ -56,15 +66,15 @@ public class JWTTokenService implements ITokenService {
                 .build();
     }
 
-    @Override
-    public long getTTL(String token) throws ExpiredJwtException {
+//    @Override
+//    public Date getTTL(String token) throws ExpiredJwtException {
 //        Jws<Claims> jwsClaims = Jwts.parser()
 //                .setSigningKey(JWT_SECRET)
 //                .parseClaimsJws(token);
 //        long from = jwsClaims.getBody().getExpiration().getTime();
 //        long to = Date.from(Instant.now()).getTime();
 //
-//        return  TimeUnit.SECONDS.convert(from - to, TimeUnit.MILLISECONDS);
-        return 30;
-    }
+//        return (int) TimeUnit.SECONDS.convert(from - to, TimeUnit.MILLISECONDS);
+////        return 30;
+//    }
 }
