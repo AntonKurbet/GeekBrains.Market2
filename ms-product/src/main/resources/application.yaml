@@ -1,7 +1,7 @@
 server:
   port: 0
-  servlet:
-    context-path: /app
+#  servlet:
+#    context-path: /app
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
