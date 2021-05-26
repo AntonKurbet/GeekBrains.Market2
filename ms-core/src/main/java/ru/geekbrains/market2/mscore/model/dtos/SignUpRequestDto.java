@@ -1,4 +1,4 @@
-package ru.geekbrains.market2.msauth.model.dtos;
+package ru.geekbrains.market2.mscore.model.dtos;
 
 import lombok.Data;
 
@@ -6,6 +6,6 @@ import lombok.Data;
 public class SignUpRequestDto {
 
     private String login;
-
     private String password;
+    private String email;
 }

@@ -1,3 +1,4 @@
+/*
 CREATE SCHEMA order_schema;
 
 CREATE TABLE market2.orders
@@ -32,4 +33,4 @@ ALTER TABLE market2.order_items
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
-
+*/

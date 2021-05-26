@@ -1,4 +1,4 @@
-package ru.geekbrains.market2.msauth.controllers;
+package ru.geekbrains.market2.mscore.model.dtos;
 
 import lombok.Data;
 

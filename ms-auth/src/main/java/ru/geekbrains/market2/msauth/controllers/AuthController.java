@@ -1,14 +1,20 @@
 package ru.geekbrains.market2.msauth.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import ru.geekbrains.market2.msauth.model.dtos.AuthResponseDto;
-import ru.geekbrains.market2.msauth.model.dtos.SignUpRequestDto;
-import ru.geekbrains.market2.mscore.configs.jwt.JwtProvider;
-import ru.geekbrains.market2.mscore.model.entities.User;
-import ru.geekbrains.market2.mscore.services.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.market2.mscore.interfaces.ITokenService;
+import ru.geekbrains.market2.mscore.model.dtos.AuthRequestDto;
+import ru.geekbrains.market2.mscore.model.dtos.AuthResponseDto;
+import ru.geekbrains.market2.mscore.model.dtos.SignUpRequestDto;
+import ru.geekbrains.market2.msauth.model.entities.User;
+import ru.geekbrains.market2.msauth.services.UserService;
+import ru.geekbrains.market2.mscore.model.entities.UserInfo;
+import ru.geekbrains.market2.mscore.repository.RedisRepository;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
 
 @RestController
@@ -18,21 +24,42 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private JwtProvider jwtProvider;
+    private ITokenService tokenService;
 
-    @PostMapping("/register")
+    @Autowired
+    private RedisRepository redisRepository;
+
+    @PostMapping("/signup")
     public String registerUser(@RequestBody SignUpRequestDto signUpRequest) {
         User user = new User();
         user.setPassword(signUpRequest.getPassword());
         user.setLogin(signUpRequest.getLogin());
+        user.setEmail(signUpRequest.getEmail());
         userService.saveUser(user);
         return "OK";
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/signin")
     public AuthResponseDto auth(@RequestBody AuthRequestDto request) {
         User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getLogin());
+        UserInfo userInfo = UserInfo.builder()
+                .userId(user.getId())
+                .userEmail(user.getLogin())
+                .role(user.getRole().getName())
+                .build();
+        String token = tokenService.generateToken(userInfo);
         return new AuthResponseDto(token);
     }
+
+    @GetMapping("/signout")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String logout(@RequestHeader(name="Authorization") String token) {
+        Date expirationDate = tokenService.getExpirationDate(token);
+        int ttl = (int) Duration.between(Instant.now(), expirationDate.toInstant()).toSeconds();
+        redisRepository.putToken(
+                token.replace("Bearer ", ""),
+                ttl);
+        return "Logged out";
+    }
+
 }

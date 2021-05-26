@@ -1,10 +1,9 @@
-package ru.geekbrains.market2.mscore.model.entities;
+package ru.geekbrains.market2.msauth.model.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data

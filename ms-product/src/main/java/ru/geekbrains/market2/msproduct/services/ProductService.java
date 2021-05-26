@@ -22,9 +22,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-//    @Autowired
-//    private ProductMapper productMapper;
-
     public Optional<ProductDto> getById(Long id) {
         return productRepository.findById(id).map(ProductDto::new);
     }

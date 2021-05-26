@@ -38,8 +38,12 @@ public class Product {
     private LocalDateTime deletedAt;
 
     @ManyToMany
-    @JoinColumn(name = "category_id")
-    private List<Category> category;
+    @JoinTable(
+            name = "products_categories",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Category> categories;
 
     public Product(String title, BigDecimal price) {
         this.title = title;

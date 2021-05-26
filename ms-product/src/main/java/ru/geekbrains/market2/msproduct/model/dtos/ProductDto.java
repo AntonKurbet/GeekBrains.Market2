@@ -19,6 +19,6 @@ public class ProductDto implements Serializable {
         id = p.getId();
         title = p.getTitle();
         price = p.getPrice();
-        category = p.getCategory().toString();
+        category = p.getCategories().toString();
     }
 }
