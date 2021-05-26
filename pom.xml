@@ -27,6 +27,7 @@
 		<module>ms-storage</module>
 		<module>eureka-server</module>
 		<module>gateway-server</module>
+		<module>lib-routing</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -41,11 +42,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
