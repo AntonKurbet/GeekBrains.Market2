@@ -13,6 +13,7 @@ import ru.geekbrains.market2.msproduct.model.entities.Product;
 import ru.geekbrains.market2.msproduct.repositories.specifications.ProductsSpecifications;
 import ru.geekbrains.market2.msproduct.services.ProductService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +38,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductDto getById(@PathVariable Long id) {
         return productService.getById(id).orElseThrow(() -> new ProductNotFoundException(id.toString()));
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/ids")
+    List<ProductDto> findProductsByIds(@RequestParam List<Long> ids) {
+        return productService.getByIds(ids);
     }
 
     @PostMapping

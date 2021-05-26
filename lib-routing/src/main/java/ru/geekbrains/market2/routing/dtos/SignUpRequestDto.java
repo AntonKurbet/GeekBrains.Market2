@@ -1,4 +1,4 @@
-package ru.geekbrains.market2.mscore.model.dtos;
+package ru.geekbrains.market2.routing.dtos;
 
 import lombok.Data;
 

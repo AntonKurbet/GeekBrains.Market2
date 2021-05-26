@@ -1,5 +1,7 @@
 package ru.geekbrains.market2.msproduct.services;
 
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,18 +14,26 @@ import ru.geekbrains.market2.msproduct.model.entities.Product;
 import ru.geekbrains.market2.msproduct.repositories.ProductRepository;
 
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    private final ModelMapper modelMapper;
 
     public Optional<ProductDto> getById(Long id) {
         return productRepository.findById(id).map(ProductDto::new);
+    }
+
+    public List<ProductDto> getByIds(List<Long> ids) {
+        return productRepository.findByIdIn(ids).stream().map(this::toDto).collect(Collectors.toList());
     }
 
     public Product add(Product product) {
@@ -61,5 +71,13 @@ public class ProductService {
 
     public Optional<Product> findProductById(Long id) {
         return productRepository.findById(id);
+    }
+
+    private ProductDto toDto(Product product) {
+        return modelMapper.map(product, ProductDto.class);
+    }
+
+    private Product toEntity(ProductDto productDto) throws ParseException {
+        return modelMapper.map(productDto, Product.class);
     }
 }

@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.market2.mscore.interfaces.ITokenService;
-import ru.geekbrains.market2.mscore.model.dtos.AuthRequestDto;
-import ru.geekbrains.market2.mscore.model.dtos.AuthResponseDto;
-import ru.geekbrains.market2.mscore.model.dtos.SignUpRequestDto;
 import ru.geekbrains.market2.msauth.model.entities.User;
 import ru.geekbrains.market2.msauth.services.UserService;
 import ru.geekbrains.market2.mscore.model.entities.UserInfo;
 import ru.geekbrains.market2.mscore.repository.RedisRepository;
+import ru.geekbrains.market2.routing.dtos.AuthRequestDto;
+import ru.geekbrains.market2.routing.dtos.AuthResponseDto;
+import ru.geekbrains.market2.routing.dtos.SignUpRequestDto;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -18,6 +18,7 @@ import java.util.Date;
 
 
 @RestController
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
@@ -44,7 +45,7 @@ public class AuthController {
         User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         UserInfo userInfo = UserInfo.builder()
                 .userId(user.getId())
-                .userEmail(user.getLogin())
+                .userEmail(user.getEmail())
                 .role(user.getRole().getName())
                 .build();
         String token = tokenService.generateToken(userInfo);
