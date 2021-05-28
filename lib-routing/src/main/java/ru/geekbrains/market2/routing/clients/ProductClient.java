@@ -2,27 +2,30 @@ package ru.geekbrains.market2.routing.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.market2.routing.dtos.ProductDto;
 
 import java.util.List;
 
 @FeignClient("ms-product")
+@RequestMapping("/api/v1/products")
 public interface ProductClient {
 
-    @GetMapping("/api/v1/products/{id}")
-    ProductDto findProductById(@PathVariable Long id);
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/{id}")
+    ProductDto getById(@PathVariable Long id);
 
-    @GetMapping("/api/v1/products/ids")
+    @GetMapping("/ids")
     List<ProductDto> findProductsByIds(@RequestParam List<Long> ids);
 
-    @PostMapping("/api/v1/products")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    ProductDto saveNewProduct(@RequestBody ProductDto product);
+    ProductDto add(@RequestBody ProductDto product);
 
-    @PutMapping("/api/v1/products")
-    ProductDto updateProduct(@RequestBody ProductDto product);
+    @PutMapping()
+    ProductDto update(@RequestBody ProductDto product);
 
-    @DeleteMapping("/api/v1/products/{id}")
-    void updateProduct(@PathVariable Long id);
+    @DeleteMapping("/{id}")
+    void delete(@PathVariable Long id);
 }

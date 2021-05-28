@@ -42,7 +42,7 @@ public class CartService {
             cart.recalculate();
             return;
         }
-        ProductDto p = productClient.findProductById(productId);
+        ProductDto p = productClient.getById(productId);
         cart.add(new CartItem(p));
     }
 
