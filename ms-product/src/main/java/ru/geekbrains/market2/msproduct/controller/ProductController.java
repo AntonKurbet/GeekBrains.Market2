@@ -23,7 +23,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     public Page<ProductDto> getAll(
             @RequestParam MultiValueMap<String,String> params,
@@ -34,13 +33,11 @@ public class ProductController {
         return productService.getAll(ProductsSpecifications.build(params), page - 1, size, Optional.of(sort));
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ProductDto getById(@PathVariable Long id) {
         return productService.getById(id).orElseThrow(() -> new ProductNotFoundException(id.toString()));
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/ids")
     List<ProductDto> findProductsByIds(@RequestParam List<Long> ids) {
         return productService.getByIds(ids);

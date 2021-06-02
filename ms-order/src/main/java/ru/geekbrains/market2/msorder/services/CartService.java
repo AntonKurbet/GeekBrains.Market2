@@ -36,14 +36,17 @@ public class CartService {
     public void addToCart(UUID cartId, Long productId) {
         CartDto cartDto = findById(cartId);
         Cart cart = modelMapper.map(cartDto, Cart.class);
+        cart.setId(cartId);
         CartItem cartItem = cart.getItemByProductId(productId);
         if (cartItem != null) {
             cartItem.incrementQuantity();
             cart.recalculate();
+            cartRepository.save(cart);
             return;
         }
         ProductDto p = productClient.findProductById(productId);
         cart.add(new CartItem(p));
+        cartRepository.save(cart);
     }
 
     @Transactional
