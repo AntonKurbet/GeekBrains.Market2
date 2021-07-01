@@ -43,18 +43,22 @@ public class CartService {
         CartItem cartItem = cart.getItemByProductId(productId);
         if (cartItem != null) {
             cartItem.incrementQuantity();
-            cardItemRepository.save(cartItem);
+            //cardItemRepository.save(cartItem);
             cart.recalculate();
-            cartRepository.save(cart);
+            //cartRepository.save(cart);
             return;
         }
-        ProductDto p = productClient.findProductById(productId);
-        cartItem = new CartItem(p);
-        cartItem.setCart(cart);
-        cardItemRepository.save(cartItem);
-        cart.add(cartItem);
-        cart.recalculate();
-        cartRepository.save(cart);
+
+        //ProductDto p = productClient.findProductById(productId);
+        //cartItem = new CartItem(p);
+        //cartItem.setCart(cart);
+        //cardItemRepository.save(cartItem);
+        //cart.add(cartItem);
+        //cart.recalculate();
+        //cartRepository.save(cart);
+
+        ProductDto p = productClient.getById(productId);
+        cart.add(new CartItem(p));
     }
 
     @Transactional
