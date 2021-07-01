@@ -2,6 +2,8 @@ package ru.geekbrains.market2.routing.dtos;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class OrderItemDto {
 
@@ -11,6 +13,6 @@ public class OrderItemDto {
 
     private int pricePerProduct;
 
-    private int price;
+    private BigDecimal price;
 
 }
