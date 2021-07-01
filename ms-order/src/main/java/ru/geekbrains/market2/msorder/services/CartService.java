@@ -3,14 +3,15 @@ package ru.geekbrains.market2.msorder.services;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.market2.msorder.model.entities.Cart;
 import ru.geekbrains.market2.msorder.model.entities.CartItem;
+import ru.geekbrains.market2.msorder.repositories.CartItemRepository;
 import ru.geekbrains.market2.msorder.repositories.CartRepository;
 import ru.geekbrains.market2.routing.clients.ProductClient;
 import ru.geekbrains.market2.routing.dtos.CartDto;
 import ru.geekbrains.market2.routing.dtos.ProductDto;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,8 @@ public class CartService {
 
     private final ModelMapper modelMapper;
 
+    private final CartItemRepository cardItemRepository;
+
     public Cart save(Cart cart) {
         return cartRepository.save(cart);
     }
@@ -36,12 +39,24 @@ public class CartService {
     public void addToCart(UUID cartId, Long productId) {
         CartDto cartDto = findById(cartId);
         Cart cart = modelMapper.map(cartDto, Cart.class);
+        cart.setId(cartId);
         CartItem cartItem = cart.getItemByProductId(productId);
         if (cartItem != null) {
             cartItem.incrementQuantity();
+            //cardItemRepository.save(cartItem);
             cart.recalculate();
+            //cartRepository.save(cart);
             return;
         }
+
+        //ProductDto p = productClient.findProductById(productId);
+        //cartItem = new CartItem(p);
+        //cartItem.setCart(cart);
+        //cardItemRepository.save(cartItem);
+        //cart.add(cartItem);
+        //cart.recalculate();
+        //cartRepository.save(cart);
+
         ProductDto p = productClient.getById(productId);
         cart.add(new CartItem(p));
     }

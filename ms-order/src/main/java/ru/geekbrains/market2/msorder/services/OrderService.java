@@ -3,6 +3,7 @@ package ru.geekbrains.market2.msorder.services;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.market2.msorder.model.entities.Cart;
 import ru.geekbrains.market2.msorder.model.entities.Order;
 import ru.geekbrains.market2.msorder.repositories.OrderRepository;
@@ -11,7 +12,6 @@ import ru.geekbrains.market2.routing.dtos.CartDto;
 import ru.geekbrains.market2.routing.dtos.OrderDto;
 import ru.geekbrains.market2.routing.dtos.ProductDto;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

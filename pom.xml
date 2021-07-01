@@ -28,12 +28,9 @@
 		<module>eureka-server</module>
 		<module>gateway-server</module>
 		<module>lib-routing</module>
-	</modules>
+        <module>front-server</module>
+    </modules>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
